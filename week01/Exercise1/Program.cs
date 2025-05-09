@@ -1,8 +1,9 @@
+
 using System;
 
 class Program
 {
-    static void Main(string[] args)
+     static void Main(string[] args)
     {
         // Prompt the user for their first name
         Console.Write("What is your first name? ");
