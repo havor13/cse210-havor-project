@@ -8,8 +8,7 @@ public class ListingActivity : MindfulnessActivity
         "Who are some of your personal heroes?"
     };
 
-    public ListingActivity()
-        : base("Listing Activity", "This activity helps you reflect on the good things in your life.")
+    public ListingActivity() : base("Listing Activity", "This activity helps you reflect on the good things in your life.")
     {
     }
 

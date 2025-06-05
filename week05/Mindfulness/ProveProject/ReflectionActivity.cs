@@ -22,8 +22,7 @@ public class ReflectionActivity : MindfulnessActivity
         "How can you keep this experience in mind in the future?"
     };
 
-    public ReflectionActivity()
-        : base("Reflection Activity", "This activity helps you reflect on your strength and resilience.")
+    public ReflectionActivity() : base("Reflection Activity", "This activity helps you reflect on your strength and resilience.")
     {
     }
 

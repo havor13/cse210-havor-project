@@ -20,14 +20,14 @@ public class MindfulnessActivity
         Console.Write("Enter duration in seconds: ");
         _duration = int.Parse(Console.ReadLine());
         Console.WriteLine("Prepare to begin...");
-        DisplayAnimation(3); // Pause for 3 seconds
+        DisplayAnimation(3); // Pause before starting
     }
 
     public void EndActivity()
     {
         Console.WriteLine("Great job! You've completed the activity.");
         Console.WriteLine($"You just finished {_name} for {_duration} seconds.");
-        DisplayAnimation(3); // Pause for 3 seconds before finishing
+        DisplayAnimation(3); // Pause before finishing
     }
 
     protected void DisplayAnimation(int seconds)

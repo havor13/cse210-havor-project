@@ -1,5 +1,4 @@
 using System;
-
 class Program
 {
     static void Main()
@@ -10,7 +9,8 @@ class Program
             Console.WriteLine("1. Breathing Activity");
             Console.WriteLine("2. Reflection Activity");
             Console.WriteLine("3. Listing Activity");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("4. Gratitude Journaling Activity");
+            Console.WriteLine("5. Exit");
             Console.Write("Choose an option: ");
 
             string choice = Console.ReadLine();
@@ -28,6 +28,9 @@ class Program
                     new ListingActivity().StartListing();
                     break;
                 case "4":
+                    new GratitudeActivity().StartGratitude();
+                    break;
+                case "5":
                     Console.WriteLine("Goodbye! Stay mindful!");
                     return;
                 default:
