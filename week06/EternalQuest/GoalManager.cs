@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 
 public class GoalManager
 {
@@ -7,6 +9,7 @@ public class GoalManager
     private LevelSystem _levelSystem;
     private BadgeSystem _badgeSystem;
     private StreakTracker _streakTracker;
+    private const string SaveFile = "goal_data.json";
 
     public GoalManager()
     {
@@ -14,12 +17,15 @@ public class GoalManager
         _levelSystem = new LevelSystem();
         _badgeSystem = new BadgeSystem();
         _streakTracker = new StreakTracker();
+
+        LoadGoals(); // Load existing data
     }
 
     public void AddGoal(Goal goal)
     {
         _goals.Add(goal);
         Console.WriteLine($"✅ Goal '{goal.Name}' added successfully!");
+        SaveGoals(); // Save after adding
     }
 
     public Goal GetGoal(string name)
@@ -44,6 +50,8 @@ public class GoalManager
 
             Console.WriteLine($"🎉 Recorded '{goalName}'. You earned {goal.Points} points!");
             Console.WriteLine($"📈 {GetLevelInfo()}");
+
+            SaveGoals(); // Save progress
         }
         else
         {
@@ -71,4 +79,42 @@ public class GoalManager
     }
 
     public string GetLevelInfo() => _levelSystem.GetLevelInfo();
+
+    public void SaveGoals()
+    {
+        try
+        {
+            var saveData = new
+            {
+                Goals = _goals,
+                LevelInfo = _levelSystem.GetLevelInfo()
+            };
+
+            string json = JsonSerializer.Serialize(saveData, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(SaveFile, json);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"⚠️ Error saving goals: {ex.Message}");
+        }
+    }
+
+    public void LoadGoals()
+    {
+        if (File.Exists(SaveFile))
+        {
+            try
+            {
+                string json = File.ReadAllText(SaveFile);
+                var saveData = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+
+                // Deserialize goals
+                _goals = JsonSerializer.Deserialize<List<Goal>>(saveData["Goals"].ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️ Error loading goals: {ex.Message}");
+            }
+        }
+    }
 }

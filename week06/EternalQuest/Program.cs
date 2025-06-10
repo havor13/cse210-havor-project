@@ -14,7 +14,9 @@ class Program
             Console.WriteLine("1. Create a Goal");
             Console.WriteLine("2. Record a Goal Event");
             Console.WriteLine("3. View Progress");
-            Console.WriteLine("4. Exit");
+            Console.WriteLine("4. Save Progress");
+            Console.WriteLine("5. Load Progress");
+            Console.WriteLine("6. Exit");
             Console.Write("Select an option: ");
             
             string choice = Console.ReadLine();
@@ -31,6 +33,14 @@ class Program
                     goalManager.DisplayProgress();
                     break;
                 case "4":
+                    goalManager.SaveGoals();
+                    Console.WriteLine("📁 Progress saved successfully!");
+                    break;
+                case "5":
+                    goalManager.LoadGoals();
+                    Console.WriteLine("🔄 Progress loaded successfully!");
+                    break;
+                case "6":
                     running = false;
                     break;
                 default:
