@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-[Serializable] // Ensures the class can be serialized
+[Serializable]
 public class UserProgress
 {
-    [XmlElement("Goals")] 
+    [XmlElement("Goals")]
     public List<Goal> Goals { get; set; } = new List<Goal>();
 
-    [XmlElement("TotalScore")] 
+    [XmlElement("TotalScore")]
     public int TotalScore { get; set; }
 
     public void AddGoal(Goal goal)
@@ -49,7 +49,8 @@ public class UserProgress
         {
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(UserProgress));
+                XmlSerializer serializer = new XmlSerializer(typeof(UserProgress),
+                    new Type[] { typeof(SimpleGoal), typeof(EternalGoal), typeof(ChecklistGoal) });
                 serializer.Serialize(fs, this);
             }
             Console.WriteLine("📁 Progress saved successfully!");
@@ -68,22 +69,11 @@ public class UserProgress
             {
                 using (FileStream fs = new FileStream(filename, FileMode.Open))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(UserProgress));
+                    XmlSerializer serializer = new XmlSerializer(typeof(UserProgress),
+                        new Type[] { typeof(SimpleGoal), typeof(EternalGoal), typeof(ChecklistGoal) });
                     UserProgress loadedData = (UserProgress)serializer.Deserialize(fs);
-                    
-                    Goals = new List<Goal>(); // Ensure a fresh list before loading
 
-                    foreach (var goal in loadedData.Goals)
-                    {
-                        // Ensure goal types are preserved after loading
-                        if (goal is SimpleGoal)
-                            Goals.Add(new SimpleGoal(goal.Name, "A simple goal", goal.Points));
-                        else if (goal is EternalGoal)
-                            Goals.Add(new EternalGoal(goal.Name, "An eternal goal", goal.Points));
-                        else if (goal is ChecklistGoal checklistGoal)
-                            Goals.Add(new ChecklistGoal(checklistGoal.Name, "Checklist goal", checklistGoal.Points, checklistGoal.TargetCount, checklistGoal.BonusPoints));
-                    }
-                    
+                    Goals = loadedData.Goals ?? new List<Goal>();
                     TotalScore = loadedData.TotalScore;
                 }
                 Console.WriteLine("🔄 Progress loaded successfully!");

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserProgress>
+    <Goals>
+        <Goal type="SimpleGoal">
+            <Name>Read a Book</Name>
+            <Description>Finish reading a book</Description>
+            <Points>100</Points>
+            <IsCompleted>false</IsCompleted>
+        </Goal>
+        <Goal type="EternalGoal">
+            <Name>Daily Exercise</Name>
+            <Description>Workout every day</Description>
+            <Points>50</Points>
+            <IsCompleted>false</IsCompleted>
+        </Goal>
+        <Goal type="ChecklistGoal">
+            <Name>Complete Assignments</Name>
+            <Description>Submit assignments</Description>
+            <Points>50</Points>
+            <TargetCount>5</TargetCount>
+            <CurrentCount>3</CurrentCount>
+            <BonusPoints>200</BonusPoints>
+            <IsCompleted>false</IsCompleted>
+        </Goal>
+    </Goals>
+    <TotalScore>250</TotalScore>
+</UserProgress>

@@ -1,12 +1,26 @@
 using System;
+using System.IO;
 
 class Program
 {
     static void Main()
     {
-        EternalQuest eternalQuest = new EternalQuest();
         UserProgress userProgress = new UserProgress();
         GoalManager goalManager = new GoalManager();
+        string progressFile = "progress.xml";
+
+        // Ensure progress.xml exists, or create a new one
+        if (!File.Exists(progressFile))
+        {
+            Console.WriteLine("📂 No progress file found, creating a new one...");
+            userProgress.AddGoal(new SimpleGoal("Read a Book", "Finish reading a book", 100));
+            userProgress.AddGoal(new EternalGoal("Daily Exercise", "Workout every day", 50));
+            userProgress.AddGoal(new ChecklistGoal("Complete Assignments", "Submit assignments", 50, 5, 200));
+            userProgress.SaveProgress(progressFile);
+        }
+
+        // Load saved progress
+        userProgress.LoadProgress(progressFile);
 
         bool running = true;
 
@@ -30,16 +44,16 @@ class Program
                     CreateGoal(goalManager);
                     break;
                 case "2":
-                    RecordGoalEvent(goalManager);
+                    RecordGoalEvent(goalManager, userProgress);
                     break;
                 case "3":
                     userProgress.DisplayProgress();
                     break;
                 case "4":
-                    userProgress.SaveProgress("progress.xml"); // Changed to XML format
+                    userProgress.SaveProgress(progressFile);
                     break;
                 case "5":
-                    userProgress.LoadProgress("progress.xml");
+                    userProgress.LoadProgress(progressFile);
                     break;
                 case "6":
                     running = false;
@@ -62,6 +76,7 @@ class Program
         Console.WriteLine("1. Simple Goal");
         Console.WriteLine("2. Eternal Goal");
         Console.WriteLine("3. Checklist Goal");
+        Console.Write("Select an option: ");
         string type = Console.ReadLine();
 
         Goal goal = null;
@@ -76,8 +91,15 @@ class Program
                 break;
             case "3":
                 Console.Write("Enter required completions: ");
-                int targetCount = int.Parse(Console.ReadLine());
-                goal = new ChecklistGoal(name, "Checklist goal", 50, targetCount, 200);
+                if (int.TryParse(Console.ReadLine(), out int targetCount))
+                {
+                    goal = new ChecklistGoal(name, "Checklist goal", 50, targetCount, 200);
+                }
+                else
+                {
+                    Console.WriteLine("⚠️ Invalid number, goal not created.");
+                    return;
+                }
                 break;
             default:
                 Console.WriteLine("⚠️ Invalid type.");
@@ -85,10 +107,10 @@ class Program
         }
 
         goalManager.AddGoal(goal);
-        Console.WriteLine("✅ Goal added successfully!");
+        Console.WriteLine($"✅ Goal '{goal.Name}' added successfully!");
     }
 
-    static void RecordGoalEvent(GoalManager goalManager)
+    static void RecordGoalEvent(GoalManager goalManager, UserProgress userProgress)
     {
         Console.WriteLine("\n🏆 Record a completed goal:");
         goalManager.ShowGoals();
@@ -96,6 +118,6 @@ class Program
         Console.Write("Enter goal name to record: ");
         string goalName = Console.ReadLine();
 
-        goalManager.RecordGoalEvent(goalName);
+        userProgress.RecordGoalEvent(goalName);
     }
 }
