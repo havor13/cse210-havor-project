@@ -5,6 +5,14 @@ public class SimpleGoal : Goal
 
     public override void RecordProgress()
     {
-        IsCompleted = true;
+        if (!IsCompleted) // Prevent marking twice
+        {
+            IsCompleted = true;
+            Console.WriteLine($"✅ Goal '{Name}' completed! +{Points} points awarded.");
+        }
+        else
+        {
+            Console.WriteLine($"⚠️ Goal '{Name}' is already completed.");
+        }
     }
 }

@@ -6,10 +6,10 @@ using System.Xml.Serialization;
 [Serializable] // Ensures the class can be serialized
 public class UserProgress
 {
-    [XmlElement("Goals")] // Explicitly marks property for XML serialization
+    [XmlElement("Goals")] 
     public List<Goal> Goals { get; set; } = new List<Goal>();
 
-    [XmlElement("TotalScore")] // Explicitly marks score field
+    [XmlElement("TotalScore")] 
     public int TotalScore { get; set; }
 
     public void AddGoal(Goal goal)
@@ -70,7 +70,20 @@ public class UserProgress
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(UserProgress));
                     UserProgress loadedData = (UserProgress)serializer.Deserialize(fs);
-                    Goals = loadedData.Goals ?? new List<Goal>();
+                    
+                    Goals = new List<Goal>(); // Ensure a fresh list before loading
+
+                    foreach (var goal in loadedData.Goals)
+                    {
+                        // Ensure goal types are preserved after loading
+                        if (goal is SimpleGoal)
+                            Goals.Add(new SimpleGoal(goal.Name, "A simple goal", goal.Points));
+                        else if (goal is EternalGoal)
+                            Goals.Add(new EternalGoal(goal.Name, "An eternal goal", goal.Points));
+                        else if (goal is ChecklistGoal checklistGoal)
+                            Goals.Add(new ChecklistGoal(checklistGoal.Name, "Checklist goal", checklistGoal.Points, checklistGoal.TargetCount, checklistGoal.BonusPoints));
+                    }
+                    
                     TotalScore = loadedData.TotalScore;
                 }
                 Console.WriteLine("🔄 Progress loaded successfully!");
