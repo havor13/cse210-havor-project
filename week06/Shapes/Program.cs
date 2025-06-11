@@ -33,7 +33,6 @@ class Program
             Console.WriteLine("3. View Progress & Score");
             Console.WriteLine("4. Save Progress");
             Console.WriteLine("5. Load Progress");
-            Console.WriteLine("6. Exit");
             Console.Write("Select an option: ");
             
             string choice = Console.ReadLine();
