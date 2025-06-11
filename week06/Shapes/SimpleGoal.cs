@@ -1,19 +1,10 @@
-// Simple goal - completed once
 public class SimpleGoal : Goal
 {
-    private bool _isCompleted;
+    public SimpleGoal(string name, string description, int points) 
+        : base(name, description, points) {}
 
-    public SimpleGoal(string name, int points) : base(name, points)
+    public override void RecordProgress()
     {
-        _isCompleted = false;
+        IsCompleted = true;
     }
-
-    public override void RecordEvent()
-    {
-        _isCompleted = true;
-    }
-
-    public override bool IsComplete() => _isCompleted;
-
-    public override string GetProgress() => _isCompleted ? "[X] Completed" : "[ ] Not Completed";
 }

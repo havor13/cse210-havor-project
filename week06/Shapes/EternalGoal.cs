@@ -1,19 +1,10 @@
-// Eternal goal - never fully completed
 public class EternalGoal : Goal
 {
-    private int _timesCompleted;
+    public EternalGoal(string name, string description, int points)
+        : base(name, description, points) {}
 
-    public EternalGoal(string name, int points) : base(name, points)
+    public override void RecordProgress()
     {
-        _timesCompleted = 0;
+        Points += 100; // Gains points each time it's recorded
     }
-
-    public override void RecordEvent()
-    {
-        _timesCompleted++;
-    }
-
-    public override bool IsComplete() => false; // Never fully complete
-
-    public override string GetProgress() => $"Completed {_timesCompleted} times";
 }

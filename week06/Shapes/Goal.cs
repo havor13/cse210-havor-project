@@ -1,18 +1,22 @@
 public abstract class Goal
 {
-    protected string _name;
-    protected int _points;
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public int Points { get; protected set; }
+    public bool IsCompleted { get; protected set; }
 
-    public Goal(string name, int points)
+    public Goal(string name, string description, int points)
     {
-        _name = name;
-        _points = points;
+        Name = name;
+        Description = description;
+        Points = points;
+        IsCompleted = false;
     }
 
-    public string Name => _name; // Public getter
-    public int Points => _points; // Public getter
+    public abstract void RecordProgress(); // Polymorphic method
 
-    public abstract void RecordEvent();
-    public abstract bool IsComplete();
-    public abstract string GetProgress();
+    public virtual string DisplayStatus()
+    {
+        return IsCompleted ? $"[✔] {Name}" : $"[ ] {Name}";
+    }
 }

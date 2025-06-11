@@ -1,20 +1,22 @@
+using System;
+using System.Collections.Generic;
+
 public class BadgeSystem
 {
-    private List<string> _badges;
+    private List<string> badges = new List<string>();
 
-    public BadgeSystem()
+    public void AwardBadge(string badge)
     {
-        _badges = new List<string>();
+        badges.Add(badge);
+        Console.WriteLine($"🏅 Badge Earned: {badge}!");
     }
 
-    public void EarnBadge(string badgeName)
+    public void ShowBadges()
     {
-        if (!_badges.Contains(badgeName))
+        Console.WriteLine("\nYour Badges:");
+        foreach (var badge in badges)
         {
-            _badges.Add(badgeName);
-            Console.WriteLine($"🏅 You earned the '{badgeName}' badge!");
+            Console.WriteLine($"- {badge}");
         }
     }
-
-    public string GetBadges() => _badges.Count > 0 ? string.Join(", ", _badges) : "No badges earned yet.";
 }

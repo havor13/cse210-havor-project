@@ -1,23 +1,34 @@
-// Checklist goal - requires multiple completions
 public class ChecklistGoal : Goal
 {
-    private int _targetCount;
-    private int _currentCount;
-    private int _bonusPoints;
+    public int TargetCount { get; private set; }
+    public int CurrentCount { get; private set; }
+    public int BonusPoints { get; private set; }
 
-    public ChecklistGoal(string name, int points, int targetCount, int bonusPoints) : base(name, points)
+    public ChecklistGoal(string name, string description, int points, int targetCount, int bonusPoints)
+        : base(name, description, points)
     {
-        _targetCount = targetCount;
-        _currentCount = 0;
-        _bonusPoints = bonusPoints;
+        TargetCount = targetCount;
+        BonusPoints = bonusPoints;
+        CurrentCount = 0;
     }
 
-    public override void RecordEvent()
+    public override void RecordProgress()
     {
-        _currentCount++;
+        CurrentCount++;
+        if (CurrentCount >= TargetCount)
+        {
+            IsCompleted = true;
+            Points += BonusPoints;
+        }
+        else
+        {
+            Points += 50; // Increment for each step
+        }
     }
 
-    public override bool IsComplete() => _currentCount >= _targetCount;
-
-    public override string GetProgress() => $"Completed {_currentCount}/{_targetCount} times";
+    public override string DisplayStatus()
+    {
+        return IsCompleted ? $"[✔] {Name} (Completed {TargetCount}/{TargetCount})"
+                           : $"[ ] {Name} (Completed {CurrentCount}/{TargetCount})";
+    }
 }

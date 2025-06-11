@@ -1,23 +1,24 @@
 public class StreakTracker
 {
-    private Dictionary<string, int> _goalStreaks;
+    public int CurrentStreak { get; private set; }
+    public int BestStreak { get; private set; }
 
-    public StreakTracker()
+    public void UpdateStreak(bool goalCompletedToday)
     {
-        _goalStreaks = new Dictionary<string, int>();
+        if (goalCompletedToday)
+        {
+            CurrentStreak++;
+            if (CurrentStreak > BestStreak)
+                BestStreak = CurrentStreak;
+        }
+        else
+        {
+            CurrentStreak = 0;
+        }
     }
 
-    public void RecordGoal(string goalName)
+    public void DisplayStreak()
     {
-        if (!_goalStreaks.ContainsKey(goalName))
-            _goalStreaks[goalName] = 0;
-        
-        _goalStreaks[goalName]++;
-        Console.WriteLine($"🔥 Streak for {goalName}: {_goalStreaks[goalName]} days in a row!");
-    }
-
-    public string GetStreaks()
-    {
-        return _goalStreaks.Count > 0 ? string.Join("\n", _goalStreaks.Select(g => $"{g.Key}: {g.Value}-day streak")) : "No active streaks.";
+        Console.WriteLine($"🔥 Current Streak: {CurrentStreak}, Best Streak: {BestStreak}");
     }
 }

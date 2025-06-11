@@ -1,28 +1,22 @@
-using System;
-
 public class LevelSystem
 {
-    private int _xp;
-    private int _level;
+    public int Level { get; private set; } = 1;
+    public int Experience { get; private set; }
+    private const int XPPerLevel = 500;
 
-    public LevelSystem()
+    public void AddExperience(int points)
     {
-        _xp = 0;
-        _level = 1;
-    }
-
-    public void AddXP(int points)
-    {
-        _xp += points;
-        if (_xp >= _level * 100) // Level up every 100 XP per level
+        Experience += points;
+        while (Experience >= XPPerLevel)
         {
-            _level++;
-            Console.WriteLine($"🎉 Congratulations! You leveled up to Level {_level}!");
+            Experience -= XPPerLevel;
+            Level++;
+            Console.WriteLine($"🔝 Level Up! You are now Level {Level}");
         }
     }
 
-    public string GetLevelInfo()
+    public void ShowLevel()
     {
-        return $"Level {_level} | XP: {_xp}";
+        Console.WriteLine($"🌟 Level: {Level}, XP: {Experience}/{XPPerLevel}");
     }
 }
