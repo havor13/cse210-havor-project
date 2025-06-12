@@ -16,29 +16,39 @@ public class UserProgress
     {
         Goals.Add(goal);
         Console.WriteLine($"✅ Added new goal: {goal.Name}");
+        SaveProgress("progress.xml"); // Auto-save after adding a goal
     }
 
     public void RecordGoalEvent(string goalName)
     {
-        foreach (var goal in Goals)
+        var goal = Goals.Find(g => g.Name.Equals(goalName, StringComparison.OrdinalIgnoreCase));
+
+        if (goal != null)
         {
-            if (goal.Name.Equals(goalName, StringComparison.OrdinalIgnoreCase))
-            {
-                goal.RecordProgress();
-                TotalScore += goal.Points;
-                Console.WriteLine($"🏆 Recorded progress for '{goal.Name}', Total Score: {TotalScore}");
-                return;
-            }
+            goal.RecordProgress();
+            TotalScore += goal.Points;
+            Console.WriteLine($"🏆 Recorded progress for '{goal.Name}', Total Score: {TotalScore}");
+            SaveProgress("progress.xml"); // Auto-save after recording a goal
         }
-        Console.WriteLine("⚠️ Goal not found.");
+        else
+        {
+            Console.WriteLine("⚠️ Goal not found.");
+        }
     }
 
     public void DisplayProgress()
     {
         Console.WriteLine("\n📊 Your Goals:");
-        foreach (var goal in Goals)
+        if (Goals.Count == 0)
         {
-            Console.WriteLine(goal.DisplayStatus());
+            Console.WriteLine("⚠️ No goals available.");
+        }
+        else
+        {
+            foreach (var goal in Goals)
+            {
+                Console.WriteLine(goal.DisplayStatus());
+            }
         }
         Console.WriteLine($"💯 Total Score: {TotalScore}");
     }
@@ -75,8 +85,10 @@ public class UserProgress
 
                     Goals = loadedData.Goals ?? new List<Goal>();
                     TotalScore = loadedData.TotalScore;
+
+                    Console.WriteLine("🔄 Progress loaded successfully!");
+                    DisplayProgress(); // Ensure goals are displayed immediately after loading
                 }
-                Console.WriteLine("🔄 Progress loaded successfully!");
             }
             else
             {
@@ -89,3 +101,4 @@ public class UserProgress
         }
     }
 }
+ 

@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 class Program
 {
@@ -7,9 +9,9 @@ class Program
     {
         UserProgress userProgress = new UserProgress();
         GoalManager goalManager = new GoalManager();
-        string progressFile = "progress.xml";
+        string progressFile = "progress.json";
 
-        // Ensure progress.xml exists, or create a new one
+        // Ensure progress file exists, or create a new one
         if (!File.Exists(progressFile))
         {
             Console.WriteLine("📂 No progress file found, creating a new one...");
@@ -30,9 +32,10 @@ class Program
             Console.WriteLine("\n🎯 Welcome to Eternal Quest!");
             Console.WriteLine("1. Create a Goal");
             Console.WriteLine("2. Record a Goal Event");
-            Console.WriteLine("3. View Progress & Score");
+            Console.WriteLine("3. View Progress & Goals");
             Console.WriteLine("4. Save Progress");
             Console.WriteLine("5. Load Progress");
+            Console.WriteLine("6. Exit");
             Console.Write("Select an option: ");
             
             string choice = Console.ReadLine();
@@ -46,13 +49,15 @@ class Program
                     RecordGoalEvent(goalManager, userProgress);
                     break;
                 case "3":
-                    userProgress.DisplayProgress();
+                    DisplayGoals(goalManager, userProgress);
                     break;
                 case "4":
                     userProgress.SaveProgress(progressFile);
+                    Console.WriteLine("✅ Progress saved successfully!");
                     break;
                 case "5":
                     userProgress.LoadProgress(progressFile);
+                    Console.WriteLine("📂 Progress loaded successfully!");
                     break;
                 case "6":
                     running = false;
@@ -61,9 +66,20 @@ class Program
                     Console.WriteLine("⚠️ Invalid option, try again.");
                     break;
             }
+
+            Console.WriteLine("\nPress Enter to continue...");
+            Console.ReadLine();
         }
 
         Console.WriteLine("🚀 Thanks for playing Eternal Quest!");
+    }
+
+    static void DisplayGoals(GoalManager goalManager, UserProgress userProgress)
+    {
+        Console.WriteLine("\n🎯 Current Goals:");
+        goalManager.ShowGoals();
+        Console.WriteLine("\n📊 Progress:");
+        userProgress.DisplayProgress();
     }
 
     static void CreateGoal(GoalManager goalManager)
@@ -118,5 +134,6 @@ class Program
         string goalName = Console.ReadLine();
 
         userProgress.RecordGoalEvent(goalName);
+        Console.WriteLine($"🎉 Goal '{goalName}' recorded!");
     }
 }
